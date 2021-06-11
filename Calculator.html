@@ -394,7 +394,10 @@
             }
         });
         $(".cls").click(function(){
-            if($(".clc").val()) $(".clc").val('');
+            $(".clc").val('');
+            num1=0;
+            num2=0;
+            op='';
         })
         $(".equal").click(function(){
             if($(".clc").val()){
