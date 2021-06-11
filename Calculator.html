@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+    <title>Calculator</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: "Poppins", sans-serif;
+            color: #008cca;
+        }
+        .cont{
+            font-family: "Poppins", sans-serif;
+            position:fixed;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+            background-image: linear-gradient(to bottom left,#ff9671,#ff6f91,#845ec2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cont1{
+            
+            background-color: #4ffbdeab;
+            filter: blur(2px);
+            height: 50vh;
+            width: 50%;
+            position:absolute;
+        }
+        .container{
+            height: 50vh;
+            width: 50%;
+            position:relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container .calc{
+            width: 45%;
+            height: 90%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container .calc input{
+            width: 200%;
+            overflow-x: scroll;
+            scrollbar-width: thin;
+            height: 30%;
+            background-color: #fbeaff;
+            text-align: right;
+            font-size: 30px;
+            position:absolute;
+            top: -30%;
+            left: 100%;
+            transform: translateX(-50%);
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .container .calc .numbers{
+            position:relative;
+            width: 100%;
+            height: 100%;
+        }
+        .container .calc .numbers .num,
+        .container .calc .numbers .zero{
+            position: relative;
+            width: 100%;
+            top: 15%;
+            height: 20%;
+            display:flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .container .operands .op .equal{
+            margin-bottom: 43%;
+        }
+        .container .calc .numbers span,
+        .container .operands .op span{
+            height: 50px;
+            width: 80px;
+            border-radius: 25px;
+            box-shadow: 4px 4px 7px #4d80766c,
+            inset 4px 4px 4px #c4fcef6c,
+            inset -4px -4px 4px #4d80766c,
+            -2px -2px 4px #c4fcef6c;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            align-items: center;
+            font-size: 30px;
+            font-weight: 500;
+        }
+        .container .calc .numbers span:hover,
+        .container .operands .op span:hover{
+            box-shadow: 4px 4px 7px #c4fcef4d,
+            inset 4px 4px 4px #4d80766c,
+            inset -4px -4px 4px #c4fcef6c,
+            -2px -2px 4px #4d80766c;
+            transform: scale(.95);
+        }
+        .container .operands{
+            width: 45%;
+            height: 90%;
+            position: relative;
+            margin-left: 10px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .container .operands .op{
+            height: 100%;
+            width: 50%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: column;
+        }
+        .cls{
+            position:absolute;
+            border-radius: 30px;
+            top: 77%;
+            cursor: pointer;
+            width: 10%;
+            text-align: center;
+            box-shadow: 4px 4px 7px #4d80766c,
+            inset 4px 4px 4px #c4fcef6c,
+            inset -4px -4px 4px #4d80766c,
+            -2px -2px 4px #c4fcef6c;
+            right: -98%;
+            padding: 10px;
+            font-weight: 800;
+            font-size: 15px;
+            z-index: 9;
+        }
+        .backspace{
+            position:absolute;
+            border-radius: 30px;
+            z-index: 9;
+            top: 77%;
+            cursor:pointer;
+            width: 10%;
+            text-align: center;
+            box-shadow: 4px 4px 7px #4d80766c,
+            inset 4px 4px 4px #c4fcef6c,
+            inset -4px -4px 4px #4d80766c,
+            -2px -2px 4px #c4fcef6c;
+            right: -75%;
+            padding: 10px;
+            font-weight: 800;
+            font-size: 15px;
+        }
+        .backspace:hover, .cls:hover{
+            
+            
+            box-shadow: 4px 4px 7px #c4fcef6c,
+            inset 4px 4px 4px #4d80766c,
+            inset -4px -4px 4px #c4fcef6c,
+            -2px -2px 4px #4d80766c;
+            transform: scale(.95);
+        }
+        .alerts{
+            position:fixed;
+            bottom: 0;
+            height: 150px;
+            width: 60%;
+            left: 20%;
+        }
+        .ale{
+            font-weight: 500;
+            height: 50px;
+            position: relative;
+            width: 100%;
+            border-radius: 27px;
+            background-color: #ffc75f;
+            color: #d65db1;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            border: 5px solid #ff9671;
+            top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cont">
+        <div class="alerts"></div>
+        <div class="cont1"></div>
+        <div class="container">
+            <div class="calc">
+                <input class="clc" readonly>
+                <div class="backspace"> <--</div>
+                <div class="cls"> CLS</div>
+                <div class="numbers">
+                    <div class="fir num">
+                        <span class="n1">1</span>
+                        <span class="n2">2</span>
+                        <span class="n3">3</span>
+                    </div>
+                    <div class="mid num">
+                        <span class="n4">4</span>
+                        <span class="n5">5</span>
+                        <span class="n6">6</span>
+                    </div>
+                    <div class="last num">
+                        <span class="n7">7</span>
+                        <span class="n8">8</span>
+                        <span class="n9">9</span>
+                    </div>
+                    <div class="zero">
+                        <span class="n0">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="operands">
+                <div class="group op">
+                    <span class="o1">+</span>
+                    <span class="o2">-</span>
+                    <span class="o3">x</span>
+                    <span class="o4">/</span>
+                </div>
+                <div class="group1 op">
+                    <span class="o5">^</span>
+                    <span class="o6">%</span>
+                    <span class="equal">=</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var aa = true, op='';
+        $("window").ready(function(){
+            $(".clc").val('');
+        });
+        $(".backspace").click(function(){
+            if($(".clc").val()){
+                var a = $(".clc").val(), b='';
+            for(let i=0; i<a.length-1; i++){
+                b = b+a[i];
+            }
+            $(".clc").val(b);
+            }
+        });
+        $(".n1").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'1');
+        });
+        $(".n2").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'2');
+        });
+        $(".n3").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'3');
+        });
+        $(".n4").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'4');
+        });
+        $(".n5").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'5');
+        });
+        $(".n6").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'6');
+        });
+        $(".n7").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'7');
+        });
+        $(".n8").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'8');
+        });
+        $(".n9").click(function(){
+            if(!aa){
+                aa = true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'9');
+        });
+        $(".n0").click(function(){
+            if(!aa){
+                aa=true;
+                $(".clc").val('');
+            }
+            var a = $(".clc").val();
+            $(".clc").val(a+'0');
+        });
+        var num1=0, num2=0;
+        $(".o1").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='+';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".o2").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='-';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".o3").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='*';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".o4").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='/';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".o5").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='^';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".o6").click(function(){
+            if($(".clc").val()){
+                num1 = $(".clc").val();
+                op='%';
+                $(".clc").val('');
+            }else{
+                $(".alerts").empty();
+                $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+            }
+        });
+        $(".cls").click(function(){
+            if($(".clc").val()) $(".clc").val('');
+        })
+        $(".equal").click(function(){
+            if($(".clc").val()){
+                num2 = $(".clc").val();
+                if(op == '+'){
+                    aa= false;
+                    $(".clc").val(parseInt(num1)+parseInt(num2));
+                    num1 = 0;
+                    num2 = 0;
+                    op = '';
+                }
+                else if(op == '-'){
+                    aa= false;
+                    $(".clc").val(parseInt(num1)-parseInt(num2));
+                    num1 = 0;
+                    num2 = 0;
+                    op='';
+                }
+                else if(op == '*'){
+                    aa= false;
+                    $(".clc").val(parseInt(num1)*parseInt(num2));
+                    num1 = 0;
+                    num2 = 0;
+                    op='';
+                }
+                else if(op == '/'){
+                    aa= false;
+                    if(!($(".clc").val() == 0)){
+                        num2 = $(".clc").val();
+                        let val = parseFloat(num1)/parseFloat(num2);
+                        $(".clc").val(val.toFixed(4))
+                        $(".clc").val();
+                    num1 = 0;
+                    num2 = 0;
+                    op='';
+                    }else{
+                        $(".alerts").empty();
+                        $(".alerts").append("<div class=\"ale\">Cannot divide by zero<\/div>");
+                    }
+                }
+                else if(op == '%'){
+                    aa= false;
+                    if(!($(".clc").val() == 0)){
+                        num2 = $(".clc").val();
+                        $(".clc").val(parseFloat(num1)%parseFloat(num2));
+                    num1 = 0;
+                    num2 = 0;
+                    op='';
+                    }else{
+                        $(".alerts").empty();
+                        $(".alerts").append("<div class=\"ale\">Cannot divide by zero<\/div>");
+                    }
+                }
+                else if(op == '^'){
+                    aa= false;
+                    num2 = $(".clc").val();
+                    let pp = parseInt(num1);
+                    for(let i=0;i<parseInt(num2)-1;i++){
+                        pp *= pp;
+                    }
+                    $(".clc").val(pp);
+                    num1 = 0;
+                    num2 = 0;
+                    op='';
+                }else{
+                    $(".alerts").empty();
+                    $(".alerts").append("<div class=\"ale\">No operator chosen<\/div>");
+                }
+            }else{
+                    $(".alerts").empty();
+                    $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
+                }
+        });
+    </script>
+</body>
+</html>
