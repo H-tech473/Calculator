@@ -6,6 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
     <title>Calculator</title>
     <style>
@@ -28,7 +29,6 @@
             align-items: center;
         }
         .cont1{
-            
             background-color: #4ffbdeab;
             filter: blur(2px);
             height: 50vh;
@@ -86,8 +86,25 @@
         .container .operands .op .equal{
             margin-bottom: 43%;
         }
+        
+        .history .uppp{
+            right: 42%;
+            position:absolute;
+            top: 70%;
+        }
+        .history .select{
+            right: 25%;
+            position:absolute;
+            top: 70%;
+        }
+        .history .down{
+            right: 49%;
+            position:absolute;
+            top: 70%;
+        }
         .container .calc .numbers span,
-        .container .operands .op span{
+        .container .operands .op span,
+        .history .uppp,.history .down, .history .select{
             height: 50px;
             width: 80px;
             border-radius: 25px;
@@ -103,7 +120,8 @@
             font-weight: 500;
         }
         .container .calc .numbers span:hover,
-        .container .operands .op span:hover{
+        .container .operands .op span:hover,
+        .history .uppp:hover,.history .down:hover, .history .select:hover{
             box-shadow: 4px 4px 7px #c4fcef4d,
             inset 4px 4px 4px #4d80766c,
             inset -4px -4px 4px #c4fcef6c,
@@ -191,6 +209,118 @@
             border: 5px solid #ff9671;
             top: 20px;
         }
+        .history{
+            height: 100vh;
+            width: 100%;
+            left:0;
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 0.616);
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+            position: absolute;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        .history .hissection{
+            height: 80vh;
+            width: 60%;
+            position: absolute;
+            background-color: #00c9a7;
+            right: 0;
+            filter: blur(4px);
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+        .history .hisdata{
+            height: 50vh;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            top: 15vh;
+            width: 58%;
+            overflow-y: scroll;
+            word-wrap: break-word;
+            scrollbar-color: #334a52 rgba(255, 255, 255, 0);
+            scrollbar-width: thin;
+            right: 0;
+            position: absolute;
+            border-left: 4px dashed rgba(0, 0, 0, 0.548);
+            border-top: 4px dashed rgba(0, 0, 0, 0.548);
+            border-bottom: 4px dashed rgba(0, 0, 0, 0.548);
+        }
+        .history .hisdata .hiss{
+            padding: 5%;
+            width: 90%;
+            left: 0;
+            top: 0;
+            position:absolute;
+        }
+        .history .hisdata .hiss .oh{
+            width: 100%;
+            z-index: 999;
+            cursor: pointer;
+        }
+        .selected{
+            background-color: blue;
+            border-radius: 10px;
+            color: #fbeaff;
+            font-weight: 500;
+            font-size: 20px;
+            padding-left: 20px;
+        }
+        @keyframes display {
+            0%{
+                opacity:0;
+            }
+            100%{
+                opacity: 1;
+            }
+        }
+        @keyframes done {
+            0%{
+                opacity:1;
+            }
+            100%{
+                opacity: 0;
+            }
+        }
+        .alertdone{
+            background-color: #ff9671;
+            height: 100px;
+            display: flex;
+            align-items:center;
+            position:absolute;
+            justify-content: center;
+            font-size: 30px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 5px;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 10px;
+            }
+        .close{
+            background-color: aquamarine;
+            height: 60px;
+            width: 60px;
+            top:10%;
+            cursor: pointer;
+            left:5%;
+            position:absolute;
+            font-size: 50px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            box-shadow: 5px 0 10px aquamarine,
+            -5px 0 10px aquamarine,
+            0px 5px 10px aquamarine,
+            0px 5px 10px aquamarine,
+            5px 5px 10px aquamarine,
+            -5px 5px 10px aquamarine,
+            -5px -5px 10px aquamarine,
+            5px -5px 10px aquamarine;
+        }
     </style>
 </head>
 <body>
@@ -219,7 +349,9 @@
                         <span class="n9">9</span>
                     </div>
                     <div class="zero">
+                        <span class="historyb">HIS</span>
                         <span class="n0">0</span>
+                        <span class="clshis">DEL</span>
                     </div>
                 </div>
             </div>
@@ -238,11 +370,80 @@
             </div>
         </div>
     </div>
+    <div class="history">
+        <div class="hissection"></div>
+        <div class="hisdata">
+            <div class="hiss">
+                <div class="alertdone">Calculator Not Used Till</div>
+            </div>
+        </div>
+        <div class="uppp"><i class="fas fa-arrow-up"></i></div>
+        <div class="down"><i class="fas fa-arrow-down"></i></div>
+        <div class="select"><i class="fas fa-check-circle"></i></div>
+        <div class="close"><i class="far fa-times-circle"></i></div>
+    </div>
     <script>
-        var aa = true, op='';
+        var aa = true, op='', hpp, tot;
         $("window").ready(function(){
             $(".clc").val('');
+            $(".h1").addClass("selected");
+            hpp = 0;
+            tot=0;
         });
+        $(".down").click(function(){
+            if(hpp+1 <= tot){
+                let selectedbox = ".h"+hpp;
+                $(selectedbox).removeClass("selected");
+                hpp++;
+                selectedbox = ".h"+hpp;
+                $(selectedbox).addClass("selected");
+            }
+        });
+        $(".uppp").click(function(){
+            if(hpp-1 >= 1){
+                let selectedbox = ".h"+hpp;
+                $(selectedbox).removeClass("selected");
+                hpp--;
+                selectedbox = ".h"+hpp;
+                $(selectedbox).addClass("selected");
+            }
+        });
+        $(".select").click(function(){
+            if(hpp != 0){
+                var b = $(".selected").attr("class");
+            b = b.split(" ");
+            b = b[1];
+            var c='';
+            for(let i=1; i<b.length; i++){
+                c+=b[i];
+            }
+            $("input").val(c);
+            $(".history").css("pointer-events","none");
+            $(".history").css("animation","done 1s ease forwards");
+                $(".alertdone").css("pointer-events","none");
+            }
+        });
+        $(".historyb").click(function(){
+            if(hpp <= 0){
+                $(".alertdone").css("pointer-events","all");
+                $(".alertdone").css("opacity","1");
+            }
+            if(hpp > 0){
+                $(".selected").removeClass("selected");
+                hpp = 1;
+                $(".h1").addClass("selected");
+                $(".alertdone").css("pointer-events","none");
+                $(".alertdone").css("opacity","0");
+            }
+            $(".history").css("pointer-events","all");
+            $(".history").css("animation","display 1s ease forwards");
+        });
+        $(".close").click(function(){
+            $(".history").css("pointer-events","none");
+            $(".history").css("animation","done 1s ease forwards");
+                $(".alertdone").css("pointer-events","none");
+        });
+
         $(".backspace").click(function(){
             if($(".clc").val()){
                 var a = $(".clc").val(), b='';
@@ -394,10 +595,7 @@
             }
         });
         $(".cls").click(function(){
-            $(".clc").val('');
-            num1=0;
-            num2=0;
-            op='';
+            if($(".clc").val()) $(".clc").val('');
         })
         $(".equal").click(function(){
             if($(".clc").val()){
@@ -405,6 +603,8 @@
                 if(op == '+'){
                     aa= false;
                     $(".clc").val(parseInt(num1)+parseInt(num2));
+                    if(hpp==0) hpp=1;
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)+parseInt(num2)} oh"> ${num1} + ${num2} = <br> &emsp; &emsp; ${parseInt(num1)+parseInt(num2)} </div>`);
                     num1 = 0;
                     num2 = 0;
                     op = '';
@@ -412,13 +612,18 @@
                 else if(op == '-'){
                     aa= false;
                     $(".clc").val(parseInt(num1)-parseInt(num2));
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)-parseInt(num2)} oh"> ${num1} - ${num2} = <br> &emsp; &emsp; ${parseInt(num1)-parseInt(num2)} </div>`);
                     num1 = 0;
+                    if(hpp==0) hpp=1;
                     num2 = 0;
                     op='';
                 }
                 else if(op == '*'){
                     aa= false;
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)*parseInt(num2)} oh"> ${num1} x ${num2} = <br> &emsp; &emsp; ${parseInt(num1)*parseInt(num2)} </div>`);
                     $(".clc").val(parseInt(num1)*parseInt(num2));
+                    
+                    if(hpp==0) hpp=1;
                     num1 = 0;
                     num2 = 0;
                     op='';
@@ -428,10 +633,13 @@
                     if(!($(".clc").val() == 0)){
                         num2 = $(".clc").val();
                         let val = parseFloat(num1)/parseFloat(num2);
+                    $(".hiss").append(`<div class="h${++tot} a${val.toFixed(4)} oh"> ${num1} / ${num2} = <br> &emsp; &emsp; ${val.toFixed(4)} </div>`);
                         $(".clc").val(val.toFixed(4))
+                    if(hpp==0) hpp=1;
                         $(".clc").val();
                     num1 = 0;
                     num2 = 0;
+                    
                     op='';
                     }else{
                         $(".alerts").empty();
@@ -442,7 +650,9 @@
                     aa= false;
                     if(!($(".clc").val() == 0)){
                         num2 = $(".clc").val();
+                        $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)%parseInt(num2)} oh"> ${num1} % ${num2} = <br> &emsp; &emsp; ${parseInt(num1)%parseInt(num2)} </div>`);
                         $(".clc").val(parseFloat(num1)%parseFloat(num2));
+                    if(hpp==0) hpp=1;
                     num1 = 0;
                     num2 = 0;
                     op='';
@@ -459,6 +669,9 @@
                         pp *= pp;
                     }
                     $(".clc").val(pp);
+                    $(".hiss").append(`<div class="h${++tot} a${pp} oh"> ${num1} ^ ${num2} = <br> &emsp; &emsp; ${pp} </div>`);
+                    
+                    if(hpp==0) hpp=1;
                     num1 = 0;
                     num2 = 0;
                     op='';
@@ -471,6 +684,11 @@
                     $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
                 }
         });
+        $(".clshis").click(function(){
+            $(".hiss").empty();
+            hpp=0;
+            tot=0;
+        })
     </script>
 </body>
 </html>
