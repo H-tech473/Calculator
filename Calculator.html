@@ -261,7 +261,7 @@
             cursor: pointer;
         }
         .selected{
-            background-color: blue;
+            background-color: rgba(94, 94, 236, 0.671);
             border-radius: 10px;
             color: #fbeaff;
             font-weight: 500;
@@ -663,11 +663,9 @@
                 }
                 else if(op == '^'){
                     aa= false;
-                    num2 = $(".clc").val();
-                    let pp = parseInt(num1);
-                    for(let i=0;i<parseInt(num2)-1;i++){
-                        pp *= pp;
-                    }
+                    num2 = parseInt($(".clc").val());
+                    var pp = parseInt(num1);
+                    pp = Math.pow(pp, num2);
                     $(".clc").val(pp);
                     $(".hiss").append(`<div class="h${++tot} a${pp} oh"> ${num1} ^ ${num2} = <br> &emsp; &emsp; ${pp} </div>`);
                     
