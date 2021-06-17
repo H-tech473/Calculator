@@ -108,10 +108,6 @@
             height: 50px;
             width: 80px;
             border-radius: 25px;
-            box-shadow: 4px 4px 7px #4d80766c,
-            inset 4px 4px 4px #c4fcef6c,
-            inset -4px -4px 4px #4d80766c,
-            -2px -2px 4px #c4fcef6c;
             display: flex;
             justify-content: center;
             cursor: pointer;
@@ -119,9 +115,23 @@
             font-size: 30px;
             font-weight: 500;
         }
+        .unpressed{
+            box-shadow: 4px 4px 7px #4d80766c,
+            inset 4px 4px 4px #c4fcef6c,
+            inset -4px -4px 4px #4d80766c,
+            -2px -2px 4px #c4fcef6c;
+            transform: scale(1);
+        }
         .container .calc .numbers span:hover,
         .container .operands .op span:hover,
         .history .uppp:hover,.history .down:hover, .history .select:hover{
+            box-shadow: 4px 4px 7px #c4fcef4d,
+            inset 4px 4px 4px #4d80766c,
+            inset -4px -4px 4px #c4fcef6c,
+            -2px -2px 4px #4d80766c;
+            transform: scale(.95);
+        }
+        .pressed{
             box-shadow: 4px 4px 7px #c4fcef4d,
             inset 4px 4px 4px #4d80766c,
             inset -4px -4px 4px #c4fcef6c,
@@ -271,17 +281,21 @@
         @keyframes display {
             0%{
                 opacity:0;
+                z-index: 0;
             }
             100%{
                 opacity: 1;
+                z-index: 999;
             }
         }
         @keyframes done {
             0%{
                 opacity:1;
+                z-index: 99;
             }
             100%{
                 opacity: 0;
+                z-index: 0;
             }
         }
         .alertdone{
@@ -289,16 +303,24 @@
             height: 100px;
             display: flex;
             align-items:center;
+            width: 80%;
             position:absolute;
             justify-content: center;
             font-size: 30px;
+            cursor:pointer;
             text-transform: uppercase;
+            pointer-events: none;
             font-weight: 700;
             letter-spacing: 5px;
-            opacity: 0;
-            pointer-events: none;
             border-radius: 10px;
             }
+        .alertshow{  
+            opacity: 1;
+        }
+        .alertnshow{  
+            opacity: 0;
+        }
+
         .close{
             background-color: aquamarine;
             height: 60px;
@@ -321,12 +343,26 @@
             -5px -5px 10px aquamarine,
             5px -5px 10px aquamarine;
         }
+        .topiic{
+            z-index: 2;
+            height: 30px;
+            backdrop-filter: blur(50px);
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.102);
+            width: 555px;
+            text-align: right;
+            font-family: "Poppins", sans-serif;
+            background-color: rgba(255, 255, 255, 0.397);
+            position:absolute;
+            top: 10%;
+            right: 30%;
+        }
     </style>
 </head>
 <body>
     <div class="cont">
         <div class="alerts"></div>
         <div class="cont1"></div>
+        <div class="topiic"></div>
         <div class="container">
             <div class="calc">
                 <input class="clc" readonly>
@@ -334,38 +370,38 @@
                 <div class="cls"> CLS</div>
                 <div class="numbers">
                     <div class="fir num">
-                        <span class="n1">1</span>
-                        <span class="n2">2</span>
-                        <span class="n3">3</span>
+                        <span class="n1 nuums unpressed">1</span>
+                        <span class="n2 nuums unpressed">2</span>
+                        <span class="n3 nuums unpressed">3</span>
                     </div>
                     <div class="mid num">
-                        <span class="n4">4</span>
-                        <span class="n5">5</span>
-                        <span class="n6">6</span>
+                        <span class="n4 nuums unpressed">4</span>
+                        <span class="n5 nuums unpressed">5</span>
+                        <span class="n6 nuums unpressed">6</span>
                     </div>
                     <div class="last num">
-                        <span class="n7">7</span>
-                        <span class="n8">8</span>
-                        <span class="n9">9</span>
+                        <span class="n7 nuums unpressed">7</span>
+                        <span class="n8 nuums unpressed">8</span>
+                        <span class="n9 nuums unpressed">9</span>
                     </div>
                     <div class="zero">
-                        <span class="historyb">HIS</span>
-                        <span class="n0">0</span>
-                        <span class="clshis">DEL</span>
+                        <span class="historyb nuums unpressed">HIS</span>
+                        <span class="n0 nuums unpressed">0</span>
+                        <span class="clshis nuums unpressed">DEL</span>
                     </div>
                 </div>
             </div>
             <div class="operands">
                 <div class="group op">
-                    <span class="o1">+</span>
-                    <span class="o2">-</span>
-                    <span class="o3">x</span>
-                    <span class="o4">/</span>
+                    <span class="o1 nuums unpressed">+</span>
+                    <span class="o2 nuums unpressed">-</span>
+                    <span class="o3 nuums unpressed">x</span>
+                    <span class="o4 nuums unpressed">/</span>
                 </div>
                 <div class="group1 op">
-                    <span class="o5">^</span>
-                    <span class="o6">%</span>
-                    <span class="equal">=</span>
+                    <span class="o5 nuums unpressed">^</span>
+                    <span class="o6 nuums unpressed">%</span>
+                    <span class="equal nuums unpressed">=</span>
                 </div>
             </div>
         </div>
@@ -374,21 +410,118 @@
         <div class="hissection"></div>
         <div class="hisdata">
             <div class="hiss">
-                <div class="alertdone">Calculator Not Used Till</div>
+                <div class="alertdone alertshow">Calculator Not Used Till</div>
             </div>
         </div>
-        <div class="uppp"><i class="fas fa-arrow-up"></i></div>
-        <div class="down"><i class="fas fa-arrow-down"></i></div>
-        <div class="select"><i class="fas fa-check-circle"></i></div>
+        <div class="uppp nuums unpressed"><i class="fas fa-arrow-up"></i></div>
+        <div class="down nuums unpressed"><i class="fas fa-arrow-down"></i></div>
+        <div class="select nuums unpressed"><i class="fas fa-check-circle"></i></div>
         <div class="close"><i class="far fa-times-circle"></i></div>
     </div>
     <script>
-        var aa = true, op='', hpp, tot;
+        var aa = true, op='', hpp, tot, bb;
+        $(".h1").mouseenter(function(){
+            console.log("dklsjlfs");
+        });
+        $("body").keypress(function(event){
+            if(event.keyCode == 99){
+                $(".cls").click();
+            }
+            if(event.keyCode == 104){
+                $(".historyb").click();
+            }
+            else if(event.keyCode == 120){
+                $(".close").click();
+            }
+            else if(event.keyCode == 49){
+                $(".n1").click();
+            }
+            else if(event.keyCode == 50){
+                $(".n2").click();
+            }
+            else if(event.keyCode == 51){
+                $(".n3").click();
+            }
+            else if(event.keyCode == 52){
+                $(".n4").click();
+            }
+            else if(event.keyCode == 53){
+                $(".n5").click();
+            }
+            else if(event.keyCode == 54){
+                $(".n6").click();
+            }
+            else if(event.keyCode == 55){
+                $(".n7").click();
+            }
+            else if(event.keyCode == 56){
+                $(".n8").click();
+            }
+            else if(event.keyCode == 57){
+                $(".n9").click();
+            }
+            else if(event.keyCode == 48){
+                $(".n0").click();
+            }
+            else if(event.keyCode == 43){
+                $(".o1").click();
+            }
+            else if(event.keyCode == 42){
+                $(".o3").click();
+            }
+            else if(event.keyCode == 45){
+                $(".o2").click();
+            }
+            else if(event.keyCode == 47){
+                $(".o4").click();
+            }
+            else if(event.keyCode == 94){
+                $(".o5").click();
+            }
+            else if(event.keyCode == 37){
+                $(".o6").click();
+            }
+            else if(event.keyCode == 61){
+                $(".equal").click();
+            }
+            else if(event.keyCode == 100){
+                $(".clshis").click();
+            }
+            
+        });
+        $("body").keyup(function(e){
+            if(e.keyCode == 8){
+                $(".backspace").click();
+            }
+            if(e.keyCode == 46){
+                $(".cls").click();
+            }
+            if(e.keyCode == 38){
+                $(".uppp").click();
+            }
+            if(e.keyCode == 40){
+                $(".down").click();
+            }
+            if(e.keyCode == 13){
+                $(".select").click();
+            }
+        });
+        $(".nuums").click(function(){
+            $(".nuums").addClass("unpressed");
+            $(".nuums").removeClass("pressed");
+            $(this).removeClass("unpressed");
+            $(this).addClass("pressed");
+        });
+        $(".nuums").mouseleave(function(){
+            $(".nuums").addClass("unpressed");
+            $(".nuums").removeClass("pressed");
+        })
         $("window").ready(function(){
             $(".clc").val('');
             $(".h1").addClass("selected");
             hpp = 0;
             tot=0;
+            bb = -1;
         });
         $(".down").click(function(){
             if(hpp+1 <= tot){
@@ -424,16 +557,18 @@
             }
         });
         $(".historyb").click(function(){
-            if(hpp <= 0){
-                $(".alertdone").css("pointer-events","all");
-                $(".alertdone").css("opacity","1");
+            if(bb == 0){
+                $(".hiss").empty();
+                $(".hiss").append(`<div class="alertdone alertshow">No History Yet</div>`);
             }
-            if(hpp > 0){
+            else if(bb == -1){
+            }
+            else{
                 $(".selected").removeClass("selected");
                 hpp = 1;
                 $(".h1").addClass("selected");
-                $(".alertdone").css("pointer-events","none");
-                $(".alertdone").css("opacity","0");
+                $(".alertdone").removeClass("alertshow");
+                $(".alertdone").addClass("alertnshow");
             }
             $(".history").css("pointer-events","all");
             $(".history").css("animation","display 1s ease forwards");
@@ -538,6 +673,8 @@
             if($(".clc").val()){
                 num1 = $(".clc").val();
                 op='+';
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} + &#8287;`)
                 $(".clc").val('');
             }else{
                 $(".alerts").empty();
@@ -549,6 +686,8 @@
                 num1 = $(".clc").val();
                 op='-';
                 $(".clc").val('');
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} - &#8287;`)
             }else{
                 $(".alerts").empty();
                 $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
@@ -558,6 +697,8 @@
             if($(".clc").val()){
                 num1 = $(".clc").val();
                 op='*';
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} x &#8287;`)
                 $(".clc").val('');
             }else{
                 $(".alerts").empty();
@@ -568,6 +709,8 @@
             if($(".clc").val()){
                 num1 = $(".clc").val();
                 op='/';
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} / &#8287;`)
                 $(".clc").val('');
             }else{
                 $(".alerts").empty();
@@ -578,6 +721,8 @@
             if($(".clc").val()){
                 num1 = $(".clc").val();
                 op='^';
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} ^ &#8287;`)
                 $(".clc").val('');
             }else{
                 $(".alerts").empty();
@@ -588,6 +733,8 @@
             if($(".clc").val()){
                 num1 = $(".clc").val();
                 op='%';
+            $(".topiic").empty();
+            $(".topiic").append(`${num1} % &#8287;`)
                 $(".clc").val('');
             }else{
                 $(".alerts").empty();
@@ -596,15 +743,20 @@
         });
         $(".cls").click(function(){
             if($(".clc").val()) $(".clc").val('');
+            $(".topiic").empty();
+            $(".topiic").append(`Cleared &#8287;`)
         })
         $(".equal").click(function(){
             if($(".clc").val()){
                 num2 = $(".clc").val();
                 if(op == '+'){
+                    bb = 2;
                     aa= false;
                     $(".clc").val(parseInt(num1)+parseInt(num2));
                     if(hpp==0) hpp=1;
-                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)+parseInt(num2)} oh"> ${num1} + ${num2} = <br> &emsp; &emsp; ${parseInt(num1)+parseInt(num2)} </div>`);
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)+parseInt(num2)} oh" onclick="clii()"> ${num1} + ${num2} = <br> &emsp; &emsp; ${parseInt(num1)+parseInt(num2)} </div>`);      
+            $(".topiic").append(`${num2} = ${parseInt(num1)+parseInt(num2)} &#8287;`)
+                    $(".alerts").empty();
                     num1 = 0;
                     num2 = 0;
                     op = '';
@@ -612,17 +764,23 @@
                 else if(op == '-'){
                     aa= false;
                     $(".clc").val(parseInt(num1)-parseInt(num2));
-                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)-parseInt(num2)} oh"> ${num1} - ${num2} = <br> &emsp; &emsp; ${parseInt(num1)-parseInt(num2)} </div>`);
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)-parseInt(num2)} oh" onclick="clii()"> ${num1} - ${num2} = <br> &emsp; &emsp; ${parseInt(num1)-parseInt(num2)} </div>`);
+            $(".topiic").append(`${num2} = ${parseInt(num1)-parseInt(num2)} &#8287;`)
                     num1 = 0;
+                    bb = 2;
                     if(hpp==0) hpp=1;
+                    $(".alerts").empty();
                     num2 = 0;
                     op='';
                 }
                 else if(op == '*'){
                     aa= false;
-                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)*parseInt(num2)} oh"> ${num1} x ${num2} = <br> &emsp; &emsp; ${parseInt(num1)*parseInt(num2)} </div>`);
+                    $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)*parseInt(num2)} oh" onclick="clii()"> ${num1} x ${num2} = <br> &emsp; &emsp; ${parseInt(num1)*parseInt(num2)} </div>`);
                     $(".clc").val(parseInt(num1)*parseInt(num2));
+            $(".topiic").append(`${num2} = ${parseInt(num1)*parseInt(num2)} &#8287;`)
                     
+                    bb = 2;
+                    $(".alerts").empty();
                     if(hpp==0) hpp=1;
                     num1 = 0;
                     num2 = 0;
@@ -632,11 +790,14 @@
                     aa= false;
                     if(!($(".clc").val() == 0)){
                         num2 = $(".clc").val();
+                    bb = 2;
                         let val = parseFloat(num1)/parseFloat(num2);
-                    $(".hiss").append(`<div class="h${++tot} a${val.toFixed(4)} oh"> ${num1} / ${num2} = <br> &emsp; &emsp; ${val.toFixed(4)} </div>`);
+                    $(".hiss").append(`<div class="h${++tot} a${val.toFixed(4)} oh" onclick="clii()"> ${num1} / ${num2} = <br> &emsp; &emsp; ${val.toFixed(4)} </div>`);
                         $(".clc").val(val.toFixed(4))
+                $(".topiic").append(`${num2} = ${val.toFixed(4)} &#8287;`)
                     if(hpp==0) hpp=1;
                         $(".clc").val();
+                    $(".alerts").empty();
                     num1 = 0;
                     num2 = 0;
                     
@@ -650,11 +811,14 @@
                     aa= false;
                     if(!($(".clc").val() == 0)){
                         num2 = $(".clc").val();
-                        $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)%parseInt(num2)} oh"> ${num1} % ${num2} = <br> &emsp; &emsp; ${parseInt(num1)%parseInt(num2)} </div>`);
+                    bb = 2;
+                        $(".hiss").append(`<div class="h${++tot} a${parseInt(num1)%parseInt(num2)} oh" onclick="clii()"> ${num1} % ${num2} = <br> &emsp; &emsp; ${parseInt(num1)%parseInt(num2)} </div>`);
                         $(".clc").val(parseFloat(num1)%parseFloat(num2));
                     if(hpp==0) hpp=1;
+                $(".topiic").append(`${num2} = ${parseInt(num1)%parseInt(num2)} &#8287;`)
                     num1 = 0;
                     num2 = 0;
+                    $(".alerts").empty();
                     op='';
                     }else{
                         $(".alerts").empty();
@@ -665,10 +829,13 @@
                     aa= false;
                     num2 = parseInt($(".clc").val());
                     var pp = parseInt(num1);
+                    bb = 2;
                     pp = Math.pow(pp, num2);
                     $(".clc").val(pp);
                     $(".hiss").append(`<div class="h${++tot} a${pp} oh"> ${num1} ^ ${num2} = <br> &emsp; &emsp; ${pp} </div>`);
+                $(".topiic").append(`${num2} = ${pp} &#8287;`)
                     
+                    $(".alerts").empty();
                     if(hpp==0) hpp=1;
                     num1 = 0;
                     num2 = 0;
@@ -682,9 +849,13 @@
                     $(".alerts").append("<div class=\"ale\">No input Fed<\/div>");
                 }
         });
+        
         $(".clshis").click(function(){
             $(".hiss").empty();
             hpp=0;
+            bb = 0;
+                $(".alertdone").removeClass("alertnshow");
+                $(".alertdone").addClass("alertshow");
             tot=0;
         })
     </script>
